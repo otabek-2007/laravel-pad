@@ -1,0 +1,165 @@
+:root {
+    --background-color: #fff;
+    --text-color: #333;
+    --card-background: #fff;
+    --input-border: #ddd;
+    --input-focus-border: #6a11cb;
+    --button-background: #6a11cb;
+    --button-hover-background: #2575fc;
+    --link-color: #6a11cb;
+    --error-color: #e74c3c;
+}
+.dark-mode-body{
+    background-color: #1e1e1e;
+}
+body.dark-mode {
+    --background-color: #1e1e1e;
+    --text-color: #ddd;
+    --card-background: #2c2c2c;
+    --input-border: #555;
+    --input-focus-border: #4b8dda;
+    --button-background: #4b8dda;
+    --button-hover-background: #3a6da7;
+    --link-color: #4b8dda;
+    --error-color: #ff7675;
+}
+
+/* Base styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: var(--background-color);
+    color: var(--text-color);
+    transition:
+        background 0.3s,
+        color 0.3s;
+}
+
+/* Card styling */
+#card {
+    background: var(--card-background);
+    width: 350px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    color: var(--text-color);
+    transition:
+        background 0.3s,
+        color 0.3s;
+}
+
+#card-title {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#card-title h2 {
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.underline-title {
+    width: 60px;
+    height: 3px;
+    background: var(--button-background);
+    margin: 8px auto 0;
+    border-radius: 5px;
+}
+
+/* Form styling */
+.form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.form-content {
+    padding: 10px;
+    border: 1px solid var(--input-border);
+    border-radius: 5px;
+    transition:
+        border-color 0.3s ease,
+        background 0.3s,
+        color 0.3s;
+    color: var(--text-color);
+    background: transparent;
+}
+
+.form-content:focus {
+    border-color: var(--input-focus-border);
+    outline: none;
+}
+
+.form-border {
+    margin-bottom: 15px;
+}
+
+.error-message {
+    font-size: 12px;
+    color: var(--error-color);
+}
+
+/* Links and buttons */
+#forgot-pass,
+#signup {
+    display: block;
+    text-align: center;
+    margin: 10px 0;
+    color: var(--link-color);
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.3s ease;
+}
+
+#forgot-pass:hover,
+#signup:hover {
+    color: var(--button-hover-background);
+}
+
+#submit-btn {
+    padding: 10px;
+    border: none;
+    margin-top: 20px;
+    border-radius: 5px;
+    background: var(--button-background);
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#submit-btn:hover {
+    background: var(--button-hover-background);
+}
+
+/* Toggle switch for dark mode */
+.dark-mode-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+    background: var(--button-background);
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.dark-mode-toggle:hover {
+    background: var(--button-hover-background);
+}
