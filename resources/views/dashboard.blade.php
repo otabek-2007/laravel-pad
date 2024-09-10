@@ -70,6 +70,38 @@
             min-width: 200px;
         }
 
+        /* Dark mode styles */
+        .dark-mode {
+            background-color: #1e1e1e;
+            color: #cfcfcf;
+        }
+
+        .dark-mode .sidebar {
+            background: #121212;
+        }
+
+        .dark-mode .top-navbar {
+            background: #1e1e1e;
+        }
+
+        .dark-mode .form-control {
+            color: #cfcfcf;
+            border-color: #555;
+        }
+
+        .dark-mode .form-control:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        .dark-mode .btn-primary {
+            background-color: #007bff;
+        }
+
+        .dark-mode .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
         /* Responsive styles */
         @media (max-width: 768px) {
             .sidebar {
@@ -227,6 +259,27 @@
         .navbar-nav .dropdown-item:hover {
             background-color: #f4f4f4;
         }
+
+        /* Dark mode toggle button styles */
+        #darkModeToggle {
+            background: none;
+            border: none;
+            color: #ecf0f1;
+            font-size: 20px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        #darkModeToggle:hover {
+            color: #1abc9c;
+        }
+
+        /* Icon styles */
+        .icon-sun,
+        .icon-moon {
+            font-size: 20px;
+            margin-left: 10px;
+        }
     </style>
 </head>
 
@@ -239,6 +292,9 @@
 
     <div class="top-navbar">
         <div class="top-navbar-left">
+            <button class="btn btn-secondary" id="darkModeToggle">
+                <i class="fas fa-sun icon-sun"></i><i class="fas fa-moon icon-moon"></i>
+            </button>
         </div>
         <div class="top-navbar-right">
             <ul class="navbar-nav d-flex flex-row">
@@ -292,25 +348,44 @@
     </div>
 
     <div class="main-content">
-        <!-- Main Content Here -->
         @yield('content')
     </div>
 
+    <script src="{{ asset('js/app.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        function toggleSidebar() {
-            var sidebar = document.querySelector('.sidebar');
-            var mainContent = document.querySelector('.main-content');
-            if (sidebar.classList.contains('visible')) {
-                sidebar.classList.remove('visible');
-                mainContent.style.marginLeft = '0';
-                mainContent.style.width = '100%';
+        document.addEventListener('DOMContentLoaded', function() {
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            const body = document.body;
+            const darkModeKey = 'darkMode';
+            const sunIcon = document.querySelector('.fa-sun');
+            const moonIcon = document.querySelector('.fa-moon');
+
+            // Check localStorage for dark mode preference
+            if (localStorage.getItem(darkModeKey) === 'enabled') {
+                body.classList.add('dark-mode');
+                moonIcon.style.display = 'none';
+                sunIcon.style.display = 'inline';
             } else {
-                sidebar.classList.add('visible');
-                mainContent.style.marginLeft = '350px';
-                mainContent.style.width = 'calc(100% - 350px)';
+                body.classList.remove('dark-mode');
+                moonIcon.style.display = 'inline';
+                sunIcon.style.display = 'none';
             }
-        }
+
+            darkModeToggle.addEventListener('click', function() {
+                if (body.classList.contains('dark-mode')) {
+                    body.classList.remove('dark-mode');
+                    localStorage.setItem(darkModeKey, 'disabled');
+                    moonIcon.style.display = 'inline';
+                    sunIcon.style.display = 'none';
+                } else {
+                    body.classList.add('dark-mode');
+                    localStorage.setItem(darkModeKey, 'enabled');
+                    moonIcon.style.display = 'none';
+                    sunIcon.style.display = 'inline';
+                }
+            });
+        });
     </script>
 </body>
 

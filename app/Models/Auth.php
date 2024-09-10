@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Auth extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['name', 'email', 'password'];
+    
     public function debtors()
     {
         return $this->hasMany(Debtor::class);
