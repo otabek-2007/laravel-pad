@@ -29,6 +29,7 @@ Route::prefix('/debtor')->middleware('auth:sanctum')->group(function () {
     Route::get('/payment/{id}', [DebtorController::class, 'show'])->name('debtor.show');
     Route::post('/store', [DebtorController::class, 'store'])->name('debtor.store');
 });
+
 Route::prefix('/payment')->middleware('auth:sanctum')->group(function () {
     Route::post('/store', [PaymentController::class, 'store'])->name('payment.store');
 });
