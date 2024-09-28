@@ -42,4 +42,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+    public function debtors()
+    {
+        return $this->hasMany(Debtor::class);
+    }
+
+    // Relationship with Payment model
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
 }

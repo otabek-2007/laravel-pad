@@ -49,6 +49,16 @@
         </div>
     </section>
     <script src="/js/dark-mode.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const darkModeToggle = document.querySelector('.dark-mode-toggle');
+
+            darkModeToggle.addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+                document.body.classList.toggle('dark-mode-body');
+            });
+        });
+    </script>
 </body>
 
 </html>

@@ -45,15 +45,24 @@ class AuthService
     public function logout()
     {
         $user = Auth::user();
-
+    
         if ($user) {
+            // If you're using Laravel Sanctum or Passport
             $user->tokens()->delete();
+    
+            // Log the user out
             Auth::logout();
-            return $user;
+    
+            // Optionally, invalidate the session and regenerate CSRF token
+            request()->session()->invalidate();
+            request()->session()->regenerateToken();
+    
+            // Redirect to login page or a specific route
+            return redirect('/user/login'); // Adjust this route as necessary
         }
-
-        return [
-            'message' => 'No user is authenticated'
-        ];
+    
+        // Redirect to login page if user was not authenticated
+        return redirect()->route('login'); // Adjust this route as necessary
     }
+    
 }

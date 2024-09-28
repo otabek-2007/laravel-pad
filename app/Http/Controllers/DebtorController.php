@@ -2,45 +2,72 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Currency;
 use App\Models\Debtor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class DebtorController extends Controller
 {
+
     public function index()
     {
-        $userId = Auth::id(); 
-        $debtors = Debtor::where('user_id', $userId)->get();
-        
-        return view('components.debtors', compact('debtors'));
+        $userId = Auth::id(); // Get the ID of the authenticated user
+
+        // Retrieve debtors associated with the authenticated user
+        $debtors = Debtor::where('user_id', $userId)->with('user')->get();
+        $currency = Currency::all();
+
+        return view('components.debtors', [
+            'debtors' => $debtors,
+            'currency' => $currency
+        ]);
     }
-    public function create(Request $request)
+
+    public function show($id)
     {
-        return view('components.add-debtor');
+        $userId = Auth::id(); // Get the ID of the authenticated user
+
+        // Retrieve debtors associated with the authenticated user
+        $debtors = Debtor::where('user_id', $userId)->with('user')->get();
+        $currency = Currency::all(); // List of all currencies
+
+        // Retrieve the specific debtor
+        $debtor = Debtor::with('payments')->find($id);
+
+        // Check if the authenticated user owns the debtor
+        if ($debtor->user_id != $userId) {
+            // Handle unauthorized access
+            abort(403, 'Unauthorized action.');
+        }
+
+        return view('components.show-debtor', [
+            'debtors' => $debtors,
+            'currency' => $currency,
+            'debtor' => $debtor
+        ]);
     }
+
+
+
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'address' => 'required|string|max:255',
-            'amount' => 'required|numeric|min:0',
-            'phone' => 'nullable|string',
-            'receipt_date' => 'nullable|date',
-            'given_date' => 'nullable|date',
+            'name' => 'required|string|min:1',
+            'address' => 'required|string|min:1',
+            'phone' => 'required|string|min:8',
         ]);
 
+
+        // Create a new Debtor record
         Debtor::create([
-            'name' => $request->input('name'),
-            'user_id' => Auth::user()->id,
-            'address' => $request->input('address'),
-            'amount' => $request->input('amount'),
-            'phone_number' => $request->input('phone'), // Ensure phone is included if needed
-            'date_of_acceptance' => $request->input('receipt_date'), // Ensure receipt_date is included if needed
-            'date_of_issue' => $request->input('given_date'), // Ensure given_date is included if needed
+            'user_id' => Auth::id(),
+            'name' => $request->name, // Corrected this line
+            'address' => $request->address,
+            'phone' => $request->phone,
         ]);
 
-        // Redirect back with success message
+        // Redirect back with a success message
         return redirect()->back()->with('success', 'Debtor added successfully!');
     }
 }

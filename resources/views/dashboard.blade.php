@@ -4,23 +4,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.cdnfonts.com/css/clash-display" rel="stylesheet">
+    <title>Debtors Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.0.0/css/flag-icons.min.css">
     <style>
-        /* Sidebar styles */
+        body {
+            font-family: 'Roboto', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .dark-mode {
+            background-color: #1c1c1c;
+            color: #c0c0c0;
+        }
+
+        .dark-mode .sidebar {
+            background: #121212;
+        }
+
+        .dark-mode .top-navbar {
+            background: #1c1c1c;
+        }
+
+        .dark-mode .modal-content {
+            background: #2c3e50;
+            color: #ecf0f1;
+        }
+
+        .dark-mode .modal-header,
+        .dark-mode .modal-footer {
+            border-color: #1abc9c;
+        }
+
+        .icon-sun,
+        .icon-moon {
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .icon-moon {
+            display: none;
+        }
+
+        .dark-mode .icon-sun {
+            display: none;
+        }
+
+        .dark-mode .icon-moon {
+            display: inline;
+        }
+
         .sidebar {
             position: fixed;
             top: 0;
             left: 0;
             height: 100%;
-            width: 350px;
-            background: #2c3e50;
+            width: 250px;
+            background: #34495e;
             color: #ecf0f1;
-            padding: 20px;
+            padding: 15px;
             overflow-y: auto;
             transition: width 0.3s;
             z-index: 1000;
@@ -29,96 +73,99 @@
         .sidebar a {
             display: block;
             color: #ecf0f1;
-            padding: 10px;
+            padding: 10px 15px;
             text-decoration: none;
-            margin-bottom: 10px;
             border-radius: 5px;
-            transition: background 0.3s, color 0.3s;
+            margin-bottom: 5px;
+            transition: background 0.3s;
         }
 
         .sidebar a:hover,
         .sidebar a.active {
             background: #1abc9c;
-            color: #fff;
         }
 
-        /* Main content styles */
         .main-content {
-            margin-left: 350px;
-            width: calc(100% - 350px);
+            margin-left: 250px;
             padding: 20px;
             transition: margin-left 0.3s;
         }
 
-        /* Top navbar styles */
         .top-navbar {
             position: fixed;
             top: 0;
-            left: 350px;
-            width: calc(100% - 350px);
-            background: #34495e;
+            left: 250px;
+            width: calc(100% - 250px);
+            background: #2c3e50;
             color: #ecf0f1;
             padding: 10px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            z-index: 999;
+            transition: margin-left 0.3s, width 0.3s;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #backButton {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
             z-index: 1000;
-            transition: width 0.3s, margin-left 0.3s;
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #1abc9c;
+            color: #fff;
+            cursor: pointer;
+            transition: background-color 0.3s;
         }
 
-        .top-navbar .dropdown-menu {
-            min-width: 200px;
+        #backButton:hover {
+            background-color: #16a085;
         }
 
-        /* Dark mode styles */
-        .dark-mode {
-            background-color: #1e1e1e;
-            color: #cfcfcf;
+        #backButton i {
+            margin-right: 5px;
         }
 
-        .dark-mode .sidebar {
-            background: #121212;
+        .top-navbar .btn {
+            margin-right: 10px;
         }
 
-        .dark-mode .top-navbar {
-            background: #1e1e1e;
+        .top-navbar-right {
+            display: flex;
+            gap: 10px;
+            align-items: center;
         }
 
-        .dark-mode .form-control {
-            color: #cfcfcf;
-            border-color: #555;
-        }
 
-        .dark-mode .form-control:focus {
-            border-color: #007bff;
-            outline: none;
-        }
 
-        .dark-mode .btn-primary {
-            background-color: #007bff;
-        }
-
-        .dark-mode .btn-primary:hover {
-            background-color: #0056b3;
-        }
-
-        /* Responsive styles */
+        /* Responsive */
         @media (max-width: 768px) {
             .sidebar {
-                width: 100%;
-                height: auto;
-                position: relative;
-                display: none;
+                width: 220px;
+                left: -220px;
+            }
+
+            .add-payment {
+                position: fixed;
+                left: 0px;
+                top: 500px;
+            }
+
+            .sidebar.visible {
+                left: 0;
             }
 
             .main-content {
                 margin-left: 0;
-                width: 100%;
             }
 
-            .sidebar.visible {
-                display: block;
-            }
+
 
             .top-navbar {
                 left: 0;
@@ -126,180 +173,61 @@
             }
 
             .sidebar-toggle {
-                display: block;
-                background: #34495e;
+                display: inline-block;
+                background: #2c3e50;
                 color: #ecf0f1;
                 padding: 10px;
                 border: none;
-                border-radius: 5px;
                 cursor: pointer;
+                border-radius: 5px;
+                margin: 10px;
             }
         }
 
-        /* Add Debtor Form styles */
-        .container {
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
 
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #333;
-        }
+        @media (max-width: 270px) {
+            .top-navbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
 
-        .add-debtor-form {
-            display: flex;
-            flex-direction: column;
-        }
+            .top-navbar .top-navbar-right {
+                margin-top: 10px;
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+            }
 
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #555;
-        }
-
-        .form-control {
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            transition: border-color 0.3s;
-        }
-
-        .form-control:focus {
-            border-color: #007bff;
-            outline: none;
-        }
-
-        .btn-primary {
-            padding: 10px 20px;
-            font-size: 16px;
-            color: #fff;
-            background-color: #007bff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .btn-primary:hover {
-            background-color: #0056b3;
-        }
-
-        /* Debtor Form styles */
-        .debtor-form {
-            display: none;
-            background: #2c3e50;
-            color: #ecf0f1;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 20px 0;
-        }
-
-        .debtor-form .form-label {
-            color: #ecf0f1;
-        }
-
-        .debtor-form button[type="submit"] {
-            background: #1abc9c;
-            border: none;
-            color: #fff;
-            padding: 10px 20px;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .debtor-form button[type="submit"]:hover {
-            background: #16a085;
-        }
-
-        /* Table Drag & Drop styles */
-        .table-container {
-            margin-top: 20px;
-        }
-
-        .table-container table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .table-container th,
-        .table-container td {
-            padding: 10px;
-            border: 1px solid #ddd;
-        }
-
-        .table-container th {
-            background-color: #f4f4f4;
-        }
-
-        .dragging {
-            opacity: 0.5;
-        }
-
-        .btn-action {
-            display: inline-block;
-            margin: 0 5px;
-        }
-
-        .navbar-nav .dropdown-menu {
-            min-width: 150px;
-        }
-
-        .navbar-nav .dropdown-item:hover {
-            background-color: #f4f4f4;
-        }
-
-        /* Dark mode toggle button styles */
-        #darkModeToggle {
-            background: none;
-            border: none;
-            color: #ecf0f1;
-            font-size: 20px;
-            cursor: pointer;
-            transition: color 0.3s;
-        }
-
-        #darkModeToggle:hover {
-            color: #1abc9c;
-        }
-
-        /* Icon styles */
-        .icon-sun,
-        .icon-moon {
-            font-size: 20px;
-            margin-left: 10px;
+            .sidebar {
+                width: 200px;
+            }
         }
     </style>
 </head>
 
 <body>
+    <button class="sidebar-toggle" onclick="toggleSidebar()">☰ Menu</button>
+
     <div class="sidebar">
-        <!-- <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button> -->
-        <a href="{{ route('debtor.index') }}" id="debtors-btn"><i class="fas fa-list m-2"></i>{{ __('messages.debtors_show') }}</a>
-        <a href="{{ route('debtor.create') }}" id="add-debtors-btn"><i class="fas fa-plus m-2"></i>{{ __('messages.add_debtors') }}</a>
+        <a href="{{ route('debtor.index') }}" id="debtors-btn"><i class="fas fa-list m-2"></i> {{ __('messages.debtors_list') }}</a>
+        @if(!empty($debtors))
+        <a href="#" class="btn btn-primary add-payment" data-bs-toggle="modal" data-bs-target="#addPaymentModal">{{ __('messages.add_payments') }}</a>
+        @endif
     </div>
 
     <div class="top-navbar">
-        <div class="top-navbar-left">
-            <button class="btn btn-secondary" id="darkModeToggle">
-                <i class="fas fa-sun icon-sun"></i><i class="fas fa-moon icon-moon"></i>
-            </button>
-        </div>
+        <button class="btn btn-secondary" id="darkModeToggle">
+            <i class="fas fa-sun icon-sun"></i>
+            <i class="fas fa-moon icon-moon"></i>
+        </button>
         <div class="top-navbar-right">
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addDebtorModal">
+                <i class="fas fa-plus"></i> {{ __('messages.add_debtor') }}
+            </button>
+
             <ul class="navbar-nav d-flex flex-row">
                 <!-- Language Dropdown -->
-                <li class="nav-item dropdown mb-2" style="margin-right: 10px;">
+                <li class="nav-item dropdown">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         @if (app()->getLocale() == 'en')
                         <span class="fi fi-gb" style="font-size: 16px;"></span> English
@@ -331,60 +259,129 @@
                         <i class="fas fa-user-circle"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                        <li><a class="dropdown-item" href="/user/profile"><i class="fas fa-user"></i> Profile</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="fas fa-cog"></i> Settings</a></li>
+                        <li><a class="dropdown-item" href="/user/profile"><i class="fas fa-user"></i> {{ __('messages.profile') }}</a></li>
                         <li>
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                                 @csrf
+                                @method('POST')
                             </form>
-                            <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                            <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                <i class="fas fa-sign-out-alt"></i> {{ __('messages.logout') }}
+                            </a>
                         </li>
                     </ul>
-
-
                 </li>
             </ul>
         </div>
     </div>
 
-    <div class="main-content">
+    <div class="main-content" style="margin-top: 100px;">
+        <!-- Content will be dynamically included here -->
         @yield('content')
     </div>
 
-    <script src="{{ asset('js/app.js') }}"></script>
+    <!-- Add Debtor Modal -->
+    <div class="modal fade" id="addDebtorModal" tabindex="-1" aria-labelledby="addDebtorModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addDebtorModalLabel">{{__('messages.add_debtors_form')}}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addDebtorForm" action="{{ route('debtor.store') }}" method="POST">
+                        @csrf
+                        <div class="mb-3">
+                            <label for="name" class="form-label">{{__('messages.name')}}</label>
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter debtor's name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="address" class="form-label">{{__('messages.address')}}</label>
+                            <input type="text" class="form-control" id="address" name="address" placeholder="Enter address" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">{{__('messages.phone')}}</label>
+                            <input type="tel" class="form-control" id="phone" name="phone" placeholder="Enter phone number" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save Debtor</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Add Payment Modal -->
+    @if(!empty($debtor))
+    <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPaymentModal">Add Payment</a>
+    <div class="modal fade" id="addPaymentModal" tabindex="-1" aria-labelledby="addPaymentModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addPaymentModalLabel">{{__('messages.add_payments_form')}} {{ $debtor->name }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('payment.store') }}" method="POST">
+                        @csrf
+                        <div class="mb-3">
+                            <label for="debtor_id" class="form-label">{{__('messages.debdor')}}</label>
+                            <select name="debtor_id" id="debtor_id" class="form-select">
+                                @foreach($debtors as $debtorOption)
+                                <option value="{{ $debtorOption->id }}" {{ $debtorOption->id == $debtor->id ? 'selected' : '' }}>
+                                    {{ $debtorOption->name }}
+                                </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="currency_id" class="form-label">{{__('messages.currency')}}</label>
+                            <select class="form-select" id="currency_id" name="currency_id" required>
+                                @foreach($currency as $currencyOption)
+                                <option value="{{ $currencyOption->id }}">{{ $currencyOption->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="amount" class="form-label">{{ __("messages.amount")}}</label>
+                            <input type="number" class="form-control" id="amount" name="amount" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save Payment</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+    @php
+    $currentUrl = Request::url();
+    @endphp
+
+    @if($currentUrl != url('/debtor/show'))
+    <button id="backButton" class="btn btn-primary">
+        <i class="fas fa-arrow-left"></i> Back
+    </button>
+    @endif
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const darkModeToggle = document.getElementById('darkModeToggle');
-            const body = document.body;
-            const darkModeKey = 'darkMode';
-            const sunIcon = document.querySelector('.fa-sun');
-            const moonIcon = document.querySelector('.fa-moon');
+        // Dark mode toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        darkModeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+        });
 
-            // Check localStorage for dark mode preference
-            if (localStorage.getItem(darkModeKey) === 'enabled') {
-                body.classList.add('dark-mode');
-                moonIcon.style.display = 'none';
-                sunIcon.style.display = 'inline';
-            } else {
-                body.classList.remove('dark-mode');
-                moonIcon.style.display = 'inline';
-                sunIcon.style.display = 'none';
-            }
-
-            darkModeToggle.addEventListener('click', function() {
-                if (body.classList.contains('dark-mode')) {
-                    body.classList.remove('dark-mode');
-                    localStorage.setItem(darkModeKey, 'disabled');
-                    moonIcon.style.display = 'inline';
-                    sunIcon.style.display = 'none';
-                } else {
-                    body.classList.add('dark-mode');
-                    localStorage.setItem(darkModeKey, 'enabled');
-                    moonIcon.style.display = 'none';
-                    sunIcon.style.display = 'inline';
-                }
-            });
+        // Toggle sidebar visibility
+        function toggleSidebar() {
+            document.querySelector('.sidebar').classList.toggle('visible');
+        }
+        document.getElementById('backButton').addEventListener('click', () => {
+            window.location.href = '/debtor/show';
         });
     </script>
 </body>

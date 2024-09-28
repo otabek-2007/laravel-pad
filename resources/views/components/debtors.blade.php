@@ -12,21 +12,15 @@
             <tr>
                 <th>{{ __('messages.name') }}</th>
                 <th>{{ __('messages.address') }}</th>
-                <th>{{ __('messages.amount') }}</th>
                 <th>{{ __('messages.phone') }}</th>
-                <th>{{ __('messages.given_date') }}</th>
-                <th>{{ __('messages.receipt_date') }}</th>
             </tr>
         </thead>
         <tbody>
             @foreach($debtors as $debtor)
             <tr>
-                <td>{{ $debtor->name }}</td>
+                <td><a href="{{ url('/debtor/payment/' . $debtor->id) }}">{{ $debtor->name }}</a></td>
                 <td>{{ $debtor->address }}</td>
-                <td>{{ $debtor->amount }}</td>
-                <td>{{ $debtor->phone_number }}</td>
-                <td>{{ $debtor->date_of_issue }}</td>
-                <td>{{ $debtor->date_of_acceptance }}</td>
+                <td>{{ $debtor->phone }}</td>
             </tr>
             @endforeach
         </tbody>
