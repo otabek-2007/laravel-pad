@@ -21,3 +21,5 @@ Route::prefix('/debtor')->middleware('auth:sanctum')->group(function () {
     Route::get('/create', [DebtorController::class, 'create'])->name('debtor.create');
     Route::post('/store', [DebtorController::class, 'store'])->name('debtors.store');
 });
+
+Route::get('/', [AuthController::class, 'register']);
